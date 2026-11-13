@@ -38,6 +38,9 @@ python3 -I scripts/india_check.py https://example.in --json
 - It does **not** invent search volumes or rankings. Keyword plans are marked
   unvalidated unless a real data source (for example DataForSEO or Search
   Console) is connected.
+- It reads one page per run; it does not crawl a whole site.
+- Sites that block automated requests (HTTP 403/429) cannot be read.
+- Publishers and news sites are treated as `service`; there is no publisher mode yet.
 - It does not run CPU-throttled Lighthouse or check Google Business Profile
   by itself; those items are reported as "unknown".
 - Fast-changing facts (AI feature languages, UPI figures, platform shares) must
