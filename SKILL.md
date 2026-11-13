@@ -38,7 +38,8 @@ If no command is given, ask which one, or run `audit` when a URL is supplied.
 ## Audit areas
 
 Score each 0-100, then give an overall score (equal weight unless the user
-says otherwise). Load a reference file only when its area is being scored.
+says otherwise). The script covers the first five areas plus a basics area;
+see the next section. Load a reference file only when its area is being scored.
 
 1. **Language and script**: `references/indic-languages.md`
    - Are Indic versions offered, or only English? Is the content translated by a
@@ -66,6 +67,15 @@ says otherwise). Load a reference file only when its area is being scored.
 7. **Cultural fit**: `references/india-cultural-profile.md`
    - Tone, festival and seasonal timing, regional imagery, price sensitivity,
      family and trust cues, avoiding one-size "pan-India" copy.
+
+## What the script scores vs what you judge
+
+The checker scores six areas: Language and script, Locale formats, Mobile and
+device, Commerce trust, Local presence, and **Structured data and basics**
+(canonical, meta description, JSON-LD, single H1). The last is the technical
+baseline, so it is reported even though it is not India-specific.
+**AI visibility** and **Cultural fit** are never scored by the script. Assess
+them yourself, or report them as "not scored".
 
 ## Workflow
 
@@ -121,8 +131,9 @@ Overall: NN/100
 | Mobile and device | NN | ... |
 | Commerce trust | NN | ... |
 | Local presence | NN | ... |
-| AI visibility | NN | ... |
-| Cultural fit | NN | ... |
+| Structured data and basics | NN | ... |
+| AI visibility | NN or not scored | ... |
+| Cultural fit | NN or not scored | ... |
 
 ## Fix first (ranked)
 1. <issue> | impact High/Med/Low | effort | how to fix

@@ -137,7 +137,7 @@ def main():
     for label, pat in (("UPI", r"\bupi\b"), ("COD", r"\bcod\b|cash on delivery"), ("EMI", r"\bemi\b")):
         found = has(pat)
         # Payment methods often appear only on product/checkout pages, so a miss is unknown, not fail.
-        add(C, f"{label} mentioned", found, "" if found else "not on this page; check product/checkout", na=not is_shop, unknown=is_shop and not found)
+        add(C, f"{label} mentioned", found, "" if found else ("not on this page; check product/checkout" if is_shop else "only scored for online shops"), na=not is_shop, unknown=is_shop and not found)
     add(C, "Return/refund policy link", bool(re.search(r'href="[^"]*(refund|return)[^"]*"', html, re.I)))
     add(C, "GST / GSTIN mentioned", has(r"\bgstin?\b"))
     add(C, "Privacy policy link", bool(re.search(r'href="[^"]*privacy[^"]*"', html, re.I)))
