@@ -12,7 +12,7 @@ user-invocable: true
 argument-hint: "[audit|keywords|local|commerce] <url-or-topic>"
 license: Proprietary - see LICENSE.txt
 metadata:
-  author: Elite
+  author: NYSHI
   version: "0.1.0"
   category: seo
 ---

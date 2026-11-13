@@ -1,11 +1,10 @@
 SEO INDIA - SINGLE-USER COMMERCIAL LICENSE
 
-Copyright (c) 2026 [LICENSOR NAME]. All rights reserved.
+Copyright (c) 2026 NYSHI. All rights reserved.
 
-NOTICE: This is a draft template, not legal advice. Have a lawyer review it
-before you sell. Replace [LICENSOR NAME] and [CONTACT EMAIL].
+NOTICE: Draft terms, not legal advice. Have a lawyer review before selling.
 
-1. GRANT. Subject to payment of the license fee, [LICENSOR NAME] ("Licensor")
+1. GRANT. Subject to payment of the license fee, NYSHI ("Licensor")
    grants you ("Licensee"), one individual, a non-exclusive, non-transferable,
    non-sublicensable, revocable license to install and use this software and its
    documentation ("the Skill") on devices you personally own or control, for
@@ -45,7 +44,7 @@ before you sell. Replace [LICENSOR NAME] and [CONTACT EMAIL].
    their code. Those tools are licensed separately by their own authors, and you
    are responsible for complying with their licenses.
 
-10. GOVERNING LAW. [Choose jurisdiction, for example the laws of India, with
-    courts at your city.]
+10. GOVERNING LAW. This license is governed by the laws of India. Courts at
+    Bangalore, Karnataka have exclusive jurisdiction.
 
-Contact: [CONTACT EMAIL]
+Contact: team@nyshi.in
