@@ -52,7 +52,7 @@ python3 -I scripts/india_check.py https://example.in --json
 SKILL.md              commands, workflow, scoring rules
 scripts/india_check.py  fact checker
 references/           language, formats, culture, mobile, commerce, local
-LICENSE.txt           single-user commercial license (draft)
+LICENSE.txt           MIT
 ```
 
 ## Works alongside
@@ -63,4 +63,15 @@ authors and are not included here.
 
 ## License
 
-Single-user commercial license. See `LICENSE.txt`.
+MIT. Free to use, modify and share. See `LICENSE.txt`.
+
+## Built by NYSHI
+
+NYSHI builds websites, SEO, WhatsApp automation and Google Business Profile
+setups for Indian businesses: https://nyshi.in , team@nyshi.in
+
+## Paid extras (planned, not built yet)
+
+The core audit stays free. Possible paid add-ons, only built if there is demand:
+multi-page crawler, client-ready report templates, validated Indic keyword
+data, and monthly fact updates. Email team@nyshi.in to say which you would use.

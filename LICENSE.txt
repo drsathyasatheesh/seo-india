@@ -1,50 +1,26 @@
-SEO INDIA - SINGLE-USER COMMERCIAL LICENSE
+MIT License
 
-Copyright (c) 2026 NYSHI. All rights reserved.
+Copyright (c) 2026 NYSHI (https://nyshi.in)
 
-NOTICE: Draft terms, not legal advice. Have a lawyer review before selling.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-1. GRANT. Subject to payment of the license fee, NYSHI ("Licensor")
-   grants you ("Licensee"), one individual, a non-exclusive, non-transferable,
-   non-sublicensable, revocable license to install and use this software and its
-   documentation ("the Skill") on devices you personally own or control, for
-   your own business or client work.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-2. SINGLE USER. One license covers one named person. Teams, agencies and
-   companies with more than one user must buy one license per user.
-   Work you deliver to clients using the Skill is allowed; giving clients the
-   Skill itself is not.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
-3. RESTRICTIONS. You may not: (a) copy, share, resell, rent, lend, sublicense,
-   publish or redistribute the Skill or any part of it, in original or modified
-   form; (b) post it in a public or shared repository; (c) remove or alter
-   copyright or license notices; (d) use it to build a competing product or
-   training dataset for resale.
-
-4. MODIFICATION. You may modify the Skill for your own use. Modified copies
-   remain subject to this license.
-
-5. OWNERSHIP. The Skill is licensed, not sold. Licensor retains all rights not
-   expressly granted.
-
-6. NO WARRANTY. THE SKILL IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND.
-   Search rankings, traffic and business results are not guaranteed. Facts about
-   third-party platforms, laws and statistics change; verify before relying on
-   them. Nothing in the Skill is legal, tax or financial advice.
-
-7. LIMITATION OF LIABILITY. To the maximum extent permitted by law, Licensor is
-   not liable for indirect, incidental or consequential damages, or for any
-   amount greater than the fee you paid for the Skill.
-
-8. TERMINATION. This license ends automatically if you breach it. On
-   termination you must delete all copies.
-
-9. THIRD-PARTY SKILLS. The Skill refers by name to other tools and skills
-   (for example seo-hreflang, seo-schema, seo-technical). It contains none of
-   their code. Those tools are licensed separately by their own authors, and you
-   are responsible for complying with their licenses.
-
-10. GOVERNING LAW. This license is governed by the laws of India. Courts at
-    Bangalore, Karnataka have exclusive jurisdiction.
-
-Contact: team@nyshi.in
+Note: seo-india refers by name to other tools (seo-hreflang, seo-schema and
+others). It contains none of their code; they are separate projects under their
+own licenses. Search rankings and business results are not guaranteed, and
+nothing here is legal, tax or financial advice.

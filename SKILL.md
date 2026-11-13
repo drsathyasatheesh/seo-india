@@ -10,10 +10,10 @@ description: >
   or wants a site to reach Indian customers.
 user-invocable: true
 argument-hint: "[audit|keywords|local|commerce] <url-or-topic>"
-license: Proprietary - see LICENSE.txt
+license: MIT
 metadata:
   author: NYSHI
-  version: "0.1.1"
+  version: "0.2.0"
   category: seo
 ---
 
