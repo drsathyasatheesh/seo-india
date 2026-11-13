@@ -13,7 +13,7 @@ argument-hint: "[audit|keywords|local|commerce] <url-or-topic>"
 license: Proprietary - see LICENSE.txt
 metadata:
   author: NYSHI
-  version: "0.1.0"
+  version: "0.1.1"
   category: seo
 ---
 

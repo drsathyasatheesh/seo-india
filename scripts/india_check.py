@@ -57,14 +57,15 @@ def main():
     if len(sys.argv) < 2:
         sys.exit("usage: india_check.py <url> [--json]")
     url = sys.argv[1]
-    if not re.match(r"^https?://", url):
+    if "://" not in url:
         url = "https://" + url
     if urllib.parse.urlparse(url).scheme not in ("http", "https"):
-        sys.exit("only http/https URLs are supported")
+        sys.exit("ERROR: only http/https URLs are supported")
     try:
         html, _, final = fetch(url)
     except Exception as e:  # unreachable site: report, do not guess
-        sys.exit(f"ERROR: could not fetch {url}: {e}")
+        hint = " (the site may block automated requests; do not guess its content, try a browser-based check)" if "403" in str(e) or "429" in str(e) else ""
+        sys.exit(f"ERROR: could not fetch {url}: {e}{hint}")
 
     ld_raw = re.findall(r'<script[^>]+application/ld\+json[^>]*>(.*?)</script>', html, re.S | re.I)
     ld, types = [], []
@@ -84,7 +85,8 @@ def main():
         return re.search(p, low, re.I) is not None
 
     local_types = {"LocalBusiness", "ProfessionalService", "Store", "Restaurant", "Dentist", "MedicalBusiness"}
-    if "Product" in types or has(r"\badd to cart\b|\bbuy now\b|\bcheckout\b"):
+    shop_links = len(re.findall(r'href="[^"]*(?:/cart|/products?/|/collections/)', html, re.I))
+    if "Product" in types or has(r"\badd to cart\b|\bbuy now\b|\bcheckout\b") or shop_links >= 5 or re.search(r"add[_-]?to[_-]?cart", html, re.I):
         btype = "ecommerce"
     elif local_types & set(types) and find_key(ld, "streetAddress"):
         btype = "local"
@@ -132,18 +134,20 @@ def main():
     C = "Commerce trust"
     is_shop = btype == "ecommerce"
     add(C, "WhatsApp contact", bool(re.search(r"wa\.me/|\bwhatsapp\b", low)))
-    add(C, "UPI mentioned", has(r"\bupi\b"), na=not is_shop)
-    add(C, "COD mentioned", has(r"\bcod\b|cash on delivery"), na=not is_shop)
-    add(C, "EMI mentioned", has(r"\bemi\b"), na=not is_shop)
+    for label, pat in (("UPI", r"\bupi\b"), ("COD", r"\bcod\b|cash on delivery"), ("EMI", r"\bemi\b")):
+        found = has(pat)
+        # Payment methods often appear only on product/checkout pages, so a miss is unknown, not fail.
+        add(C, f"{label} mentioned", found, "" if found else "not on this page; check product/checkout", na=not is_shop, unknown=is_shop and not found)
     add(C, "Return/refund policy link", bool(re.search(r'href="[^"]*(refund|return)[^"]*"', html, re.I)))
     add(C, "GST / GSTIN mentioned", has(r"\bgstin?\b"))
     add(C, "Privacy policy link", bool(re.search(r'href="[^"]*privacy[^"]*"', html, re.I)))
 
     LO = "Local presence"
-    add(LO, "schema has addressLocality", bool(find_key(ld, "addressLocality")))
-    add(LO, "schema has geo coordinates", bool(find_key(ld, "geo")))
-    add(LO, "schema has openingHours", bool(find_key(ld, "openingHoursSpecification") or find_key(ld, "openingHours")))
-    add(LO, "Google Business Profile verified", False, "needs live GBP data", unknown=True)
+    online_only = btype == "ecommerce" and not (local_types & set(types))
+    add(LO, "schema has addressLocality", bool(find_key(ld, "addressLocality")), na=online_only)
+    add(LO, "schema has geo coordinates", bool(find_key(ld, "geo")), na=online_only)
+    add(LO, "schema has openingHours", bool(find_key(ld, "openingHoursSpecification") or find_key(ld, "openingHours")), na=online_only)
+    add(LO, "Google Business Profile verified", False, "needs live GBP data", unknown=True, na=online_only)
 
     S = "Structured data and basics"
     add(S, "canonical tag", bool(re.search(r'rel="canonical"', html, re.I)))
@@ -161,16 +165,18 @@ def main():
         return round(100 * p / (p + f)) if p + f else None
 
     scores = {a: score(r) for a, r in areas.items()}
+    provisional = [a for a, r in areas.items() if any(st == "unknown" for _, st, _ in r)]
     scored = [v for v in scores.values() if v is not None]
     overall = round(sum(scored) / len(scored)) if scored else None
-    result = {"url": final, "business_type": btype, "overall": overall, "scores": scores,
+    result = {"url": final, "business_type": btype, "overall": overall, "scores": scores, "provisional_areas": provisional,
               "checks": [dict(area=a, check=n, status=s, note=t) for a, n, s, t in checks]}
     if "--json" in sys.argv:
         print(json.dumps(result, indent=1, ensure_ascii=False))
         return
     print(f"# India check: {final}\nBusiness type (heuristic): {btype}\nOverall (scored areas only): {overall}\n")
     for a, rows in areas.items():
-        print(f"## {a}: {scores[a] if scores[a] is not None else 'not scored'}")
+        tag = " (provisional: has unknown checks)" if a in provisional else ""
+        print(f"## {a}: {scores[a] if scores[a] is not None else 'not scored'}{tag}")
         for n, s, t in rows:
             print(f"- [{s.upper():7}] {n}" + (f" ({t})" if t else ""))
         print()
