@@ -1,0 +1,51 @@
+SEO INDIA - SINGLE-USER COMMERCIAL LICENSE
+
+Copyright (c) 2026 [LICENSOR NAME]. All rights reserved.
+
+NOTICE: This is a draft template, not legal advice. Have a lawyer review it
+before you sell. Replace [LICENSOR NAME] and [CONTACT EMAIL].
+
+1. GRANT. Subject to payment of the license fee, [LICENSOR NAME] ("Licensor")
+   grants you ("Licensee"), one individual, a non-exclusive, non-transferable,
+   non-sublicensable, revocable license to install and use this software and its
+   documentation ("the Skill") on devices you personally own or control, for
+   your own business or client work.
+
+2. SINGLE USER. One license covers one named person. Teams, agencies and
+   companies with more than one user must buy one license per user.
+   Work you deliver to clients using the Skill is allowed; giving clients the
+   Skill itself is not.
+
+3. RESTRICTIONS. You may not: (a) copy, share, resell, rent, lend, sublicense,
+   publish or redistribute the Skill or any part of it, in original or modified
+   form; (b) post it in a public or shared repository; (c) remove or alter
+   copyright or license notices; (d) use it to build a competing product or
+   training dataset for resale.
+
+4. MODIFICATION. You may modify the Skill for your own use. Modified copies
+   remain subject to this license.
+
+5. OWNERSHIP. The Skill is licensed, not sold. Licensor retains all rights not
+   expressly granted.
+
+6. NO WARRANTY. THE SKILL IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND.
+   Search rankings, traffic and business results are not guaranteed. Facts about
+   third-party platforms, laws and statistics change; verify before relying on
+   them. Nothing in the Skill is legal, tax or financial advice.
+
+7. LIMITATION OF LIABILITY. To the maximum extent permitted by law, Licensor is
+   not liable for indirect, incidental or consequential damages, or for any
+   amount greater than the fee you paid for the Skill.
+
+8. TERMINATION. This license ends automatically if you breach it. On
+   termination you must delete all copies.
+
+9. THIRD-PARTY SKILLS. The Skill refers by name to other tools and skills
+   (for example seo-hreflang, seo-schema, seo-technical). It contains none of
+   their code. Those tools are licensed separately by their own authors, and you
+   are responsible for complying with their licenses.
+
+10. GOVERNING LAW. [Choose jurisdiction, for example the laws of India, with
+    courts at your city.]
+
+Contact: [CONTACT EMAIL]
