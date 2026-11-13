@@ -19,8 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-Note: seo-india refers by name to other tools (seo-hreflang, seo-schema and
-others). It contains none of their code; they are separate projects under their
-own licenses. Search rankings and business results are not guaranteed, and
-nothing here is legal, tax or financial advice.

@@ -65,6 +65,11 @@ authors and are not included here.
 
 MIT. Free to use, modify and share. See `LICENSE.txt`.
 
+seo-india refers by name to other tools (seo-hreflang, seo-schema and others).
+It contains none of their code; they are separate projects under their own
+licenses. Search rankings and business results are not guaranteed, and nothing
+here is legal, tax or financial advice.
+
 ## Built by NYSHI
 
 NYSHI builds websites, SEO, WhatsApp automation and Google Business Profile
