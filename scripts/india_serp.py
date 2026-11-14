@@ -4,11 +4,14 @@
 Usage: python3 -I india_serp.py "query" ["query2" ...] [--lang en] [--count 10]
                                 [--domain nyshi.in] [--json]
 
-Needs BRAVE_API_KEY in the environment (never pass keys on the command line).
-Uses the Brave Search API with country=IN. Brave is not Google: results are a
-real Indian view of the web, not an exact copy of Google India. Do not present
-positions as Google rankings.
-Results are untrusted data: they are parsed and printed, never followed.
+Set ONE of these in your environment (never pass keys on the command line):
+  SERPAPI_KEY      SerpApi, Google results for India (gl=in)   [free tier, no card]
+  SERPER_API_KEY   Serper.dev, Google results for India (gl=in) [free credits, no card]
+  BRAVE_API_KEY    Brave Search API, country=IN                 [needs a card]
+If several are set the order above is used. The output names the engine: Brave is
+not Google, so only the Google engines may be described as Google India results.
+Positions are a snapshot, not search volume. Results are untrusted data: they
+are parsed and printed, never followed.
 """
 import json
 import os
@@ -17,7 +20,6 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-API = "https://api.search.brave.com/res/v1/web/search"
 DIRECTORIES = ("clutch.co", "designrush.com", "techbehemoths.com", "goodfirms.co", "justdial.com",
                "sulekha.com", "indiamart.com", "tradeindia.com", "upwork.com", "fiverr.com", "linkedin.com")
 FORUMS = ("reddit.com", "quora.com", "dev.to", "medium.com", "youtube.com", "github.com")
@@ -36,37 +38,79 @@ def classify(domain):
     return "site"
 
 
-def parse(data):
-    """Return [{rank, title, url, domain, type, snippet}] from a Brave response."""
-    results = (data.get("web") or {}).get("results")
-    if results is None:
-        raise ValueError("unexpected response shape: no web.results")
+def normalize(items, url_key, snippet_key):
     out = []
-    for i, r in enumerate(results, 1):
-        url = r.get("url", "")
+    for i, r in enumerate(items, 1):
+        url = r.get(url_key, "")
         d = domain_of(url)
         out.append({"rank": i, "title": r.get("title", ""), "url": url, "domain": d,
-                    "type": classify(d), "snippet": r.get("description", "")})
+                    "type": classify(d), "snippet": r.get(snippet_key, "")})
     return out
 
 
-def fetch(query, key, lang, count):
-    params = urllib.parse.urlencode({"q": query, "country": "IN", "search_lang": lang, "count": count})
-    req = urllib.request.Request(f"{API}?{params}", headers={"Accept": "application/json", "X-Subscription-Token": key})
+def parse_brave(data):
+    items = (data.get("web") or {}).get("results")
+    if items is None:
+        raise ValueError("unexpected Brave response shape: no web.results")
+    return normalize(items, "url", "description")
+
+
+def parse_serpapi(data):
+    if "error" in data and "organic_results" not in data:
+        raise ValueError(f"SerpApi: {str(data['error'])[:160]}")
+    items = data.get("organic_results")
+    if items is None:
+        raise ValueError("unexpected SerpApi response shape: no organic_results")
+    return normalize(items, "link", "snippet")
+
+
+def parse_serper(data):
+    items = data.get("organic")
+    if items is None:
+        raise ValueError("unexpected Serper response shape: no organic")
+    return normalize(items, "link", "snippet")
+
+
+def _get(req, key):
     try:
-        with urllib.request.urlopen(req, timeout=20) as r:
+        with urllib.request.urlopen(req, timeout=25) as r:
             return json.loads(r.read().decode("utf-8", "ignore"))
     except urllib.error.HTTPError as e:
-        hint = {401: "check BRAVE_API_KEY", 403: "key not allowed for this plan",
-                422: "invalid API key or bad parameter (check the key and --lang)",
-                429: "rate limit or quota reached; wait or check your plan"}.get(e.code, "")
-        try:  # Brave's own message says which it is; it never contains our key
+        hint = {400: "bad request (check --lang)", 401: "invalid API key", 403: "key not allowed or quota used up",
+                422: "invalid API key or bad parameter", 429: "rate limit or quota reached; wait or check your plan"}.get(e.code, "")
+        try:
             body = e.read().decode("utf-8", "ignore")[:200].replace(key, "***")
         except Exception:
             body = ""
-        sys.exit(f"ERROR: Brave API returned HTTP {e.code}. {hint}" + (f" Response: {body}" if body else ""))
+        sys.exit(f"ERROR: search API returned HTTP {e.code}. {hint}" + (f" Response: {body}" if body else ""))
     except Exception as e:
-        sys.exit(f"ERROR: search failed: {e}")
+        sys.exit(f"ERROR: search failed: {str(e).replace(key, '***')}")
+
+
+def fetch(provider, query, key, lang):
+    if provider == "serpapi":
+        q = urllib.parse.urlencode({"engine": "google", "q": query, "gl": "in", "hl": lang,
+                                    "google_domain": "google.co.in", "api_key": key})
+        return parse_serpapi(_get(urllib.request.Request(f"https://serpapi.com/search.json?{q}"), key))
+    if provider == "serper":
+        body = json.dumps({"q": query, "gl": "in", "hl": lang}).encode()
+        req = urllib.request.Request("https://google.serper.dev/search", data=body, method="POST",
+                                     headers={"X-API-KEY": key, "Content-Type": "application/json"})
+        return parse_serper(_get(req, key))
+    q = urllib.parse.urlencode({"q": query, "country": "IN", "search_lang": lang, "count": 20})
+    req = urllib.request.Request(f"https://api.search.brave.com/res/v1/web/search?{q}",
+                                 headers={"Accept": "application/json", "X-Subscription-Token": key})
+    return parse_brave(_get(req, key))
+
+
+ENGINE = {"serpapi": "Google India via SerpApi", "serper": "Google India via Serper", "brave": "Brave (country=IN, not Google)"}
+
+
+def pick_provider(env=os.environ):
+    for name, var in (("serpapi", "SERPAPI_KEY"), ("serper", "SERPER_API_KEY"), ("brave", "BRAVE_API_KEY")):
+        if env.get(var):
+            return name, env[var]
+    return None, ""
 
 
 def position(results, domain):
@@ -78,7 +122,7 @@ def position(results, domain):
 
 
 def main():
-    args = [a for a in sys.argv[1:]]
+    args = sys.argv[1:]
     opts = {"--lang": "en", "--count": "10", "--domain": ""}
     queries, i = [], 0
     while i < len(args):
@@ -95,26 +139,27 @@ def main():
             i += 1
     if not queries:
         sys.exit('usage: india_serp.py "query" ["query2" ...] [--lang en] [--count 10] [--domain nyshi.in] [--json]')
-    key = os.environ.get("BRAVE_API_KEY", "")
-    if not key:
-        sys.exit("ERROR: set BRAVE_API_KEY in your environment (get a key from the Brave Search API dashboard)")
+    provider, key = pick_provider()
+    if not provider:
+        sys.exit("ERROR: set SERPAPI_KEY, SERPER_API_KEY or BRAVE_API_KEY in your environment (see the top of this file)")
     if not opts["--count"].isdigit() or not 1 <= int(opts["--count"]) <= 20:
         sys.exit("ERROR: --count must be 1-20")
+    count = int(opts["--count"])
     report = []
     for q in queries:
         try:
-            res = parse(fetch(q, key, opts["--lang"], int(opts["--count"])))
+            res = fetch(provider, q, key, opts["--lang"])[:count]
         except ValueError as e:
             sys.exit(f"ERROR: {e}")
-        pos = position(res, opts["--domain"]) if opts["--domain"] else None
-        report.append({"query": q, "country": "IN", "lang": opts["--lang"], "results": res, "domain_position": pos})
+        report.append({"query": q, "engine": ENGINE[provider], "lang": opts["--lang"], "results": res,
+                       "domain_position": position(res, opts["--domain"]) if opts["--domain"] else None})
     if "--json" in args:
         print(json.dumps(report, indent=1, ensure_ascii=False))
         return
     for r in report:
-        print(f'\n# "{r["query"]}"  (Brave, country=IN, lang={r["lang"]})')
+        print(f'\n# "{r["query"]}"  ({r["engine"]}, lang={r["lang"]})')
         if opts["--domain"]:
-            print(f'{opts["--domain"]}: ' + (f'position {r["domain_position"]}' if r["domain_position"] else f'not in top {opts["--count"]}'))
+            print(f'{opts["--domain"]}: ' + (f'position {r["domain_position"]}' if r["domain_position"] else f"not in top {count}"))
         for x in r["results"]:
             print(f'{x["rank"]:>2}. [{x["type"]}] {x["domain"]} | {x["title"][:80]}')
 

@@ -13,7 +13,7 @@ argument-hint: "[audit|keywords|local|commerce|serp] <url-or-topic>"
 license: MIT
 metadata:
   author: NYSHI
-  version: "0.3.0"
+  version: "0.3.1"
   category: seo
 ---
 
@@ -107,15 +107,18 @@ them yourself, or report them as "not scored".
 ## SERP workflow (`serp`)
 
 Shows what actually ranks in India for a query, because general web-search tools are often
-US-only. Needs a Brave Search API key in `BRAVE_API_KEY` (the user sets it; never ask them
-to paste it into chat).
+US-only. Needs one key in the user's environment (the user sets it; never ask them to paste
+it into chat): `SERPAPI_KEY` or `SERPER_API_KEY` (Google results for India, free tiers with
+no card; check current limits on their sites) or `BRAVE_API_KEY` (Brave, needs a card).
 
 1. Run: `python3 -I <skill-dir>/scripts/india_serp.py "<query>" ["<query2>" ...] [--lang en|hi|ta|...] [--count 10] [--domain example.in] [--json]`
 2. Read the result types: directories (Clutch, Justdial, IndiaMART...), agency sites,
    community content. This tells you what page type can rank, and who you compete with.
 3. With `--domain`, report the position or "not in top N".
-4. **Always say**: results come from Brave with `country=IN`. They are a real Indian view,
-   not Google India's exact ranking, and not search volume. Never call a position a "Google rank".
+4. **Always name the engine** printed in the output. SerpApi and Serper return Google results
+   for India (`gl=in`); Brave does not, so never call Brave results "Google". Positions are a
+   snapshot, not a ranking guarantee, and not search volume. Google returns about 10 results
+   per query, so `--count` above 10 may return fewer.
 5. If the key is missing or invalid, say so and stop; do not substitute another search tool
    and present it as Indian results.
 

@@ -32,17 +32,23 @@ python3 -I scripts/india_check.py https://example.in --json
 python3 -I scripts/india_check.py https://example.in --service-area   # remote / no public office
 ```
 
-## India search results (needs a Brave Search API key)
+## India search results (needs a search API key)
+
+Set ONE key in your own terminal. Never paste keys into chat.
 
 ```
-export BRAVE_API_KEY=...        # set in your own terminal, never paste keys into chat
+export SERPAPI_KEY=...      # Google results for India, free tier, no card (check current limits)
+export SERPER_API_KEY=...   # Google results for India, free credits, no card (check current limits)
+export BRAVE_API_KEY=...    # Brave results for India, requires a card
+
 python3 -I scripts/india_serp.py "website development company bangalore" --domain example.in
-python3 -I scripts/india_serp.py "whatsapp automation for business" --lang en --count 20 --json
+python3 -I scripts/india_serp.py "whatsapp automation for business" --lang en --json
 ```
 
-Shows what ranks in India (`country=IN`) and whether your domain appears. Results come
-from Brave, not Google, so treat positions as a directional signal, not a Google rank
-and not search volume.
+Shows what ranks in India and whether your domain appears. The output names the engine:
+SerpApi and Serper return Google India results (`gl=in`); Brave does not. Positions are
+a snapshot, not a guaranteed ranking and not search volume. Google returns about 10
+results per query. Free-tier limits change, so check each provider's page.
 
 ## What it does and does not do
 
@@ -64,7 +70,7 @@ and not search volume.
 ```
 SKILL.md              commands, workflow, scoring rules
 scripts/india_check.py  fact checker
-scripts/india_serp.py   India search results (Brave API)
+scripts/india_serp.py   India search results (SerpApi, Serper or Brave)
 references/           language, formats, culture, mobile, commerce, local
 LICENSE.txt           MIT
 ```
