@@ -9,11 +9,11 @@ description: >
   "Hinglish", "regional language SEO", "target India", "UPI", "tier 2 cities",
   or wants a site to reach Indian customers.
 user-invocable: true
-argument-hint: "[audit|keywords|local|commerce] <url-or-topic>"
+argument-hint: "[audit|keywords|local|commerce|serp] <url-or-topic>"
 license: MIT
 metadata:
   author: NYSHI
-  version: "0.2.0"
+  version: "0.3.0"
   category: seo
 ---
 
@@ -32,6 +32,7 @@ use this skill for what is different in India.
 | `/seo-india keywords <topic>` | Indic, Hinglish and transliterated keyword plan for a topic |
 | `/seo-india local <business or url>` | Local SEO for Indian cities, PIN codes and directories |
 | `/seo-india commerce <url>` | Trust and conversion check for Indian shoppers |
+| `/seo-india serp <query> [--domain site]` | Real Indian search results for a keyword, and where a domain appears |
 
 If no command is given, ask which one, or run `audit` when a URL is supplied.
 
@@ -103,6 +104,21 @@ them yourself, or report them as "not scored".
 - Text checks use whole-word matching. Plain substring matches give false
   positives (for example "COD" inside "code").
 
+## SERP workflow (`serp`)
+
+Shows what actually ranks in India for a query, because general web-search tools are often
+US-only. Needs a Brave Search API key in `BRAVE_API_KEY` (the user sets it; never ask them
+to paste it into chat).
+
+1. Run: `python3 -I <skill-dir>/scripts/india_serp.py "<query>" ["<query2>" ...] [--lang en|hi|ta|...] [--count 10] [--domain example.in] [--json]`
+2. Read the result types: directories (Clutch, Justdial, IndiaMART...), agency sites,
+   community content. This tells you what page type can rank, and who you compete with.
+3. With `--domain`, report the position or "not in top N".
+4. **Always say**: results come from Brave with `country=IN`. They are a real Indian view,
+   not Google India's exact ranking, and not search volume. Never call a position a "Google rank".
+5. If the key is missing or invalid, say so and stop; do not substitute another search tool
+   and present it as Indian results.
+
 ## Keyword workflow (`keywords`)
 
 1. Take the seed topic in English.
@@ -110,6 +126,7 @@ them yourself, or report them as "not scored".
    (Roman script for Indic words), and Hinglish mixes.
 3. Mark each set **unvalidated** unless real volume data is available through
    a connected source (`seo-dataforseo`, `seo-google`). Never invent search volumes.
+   `serp` can show who ranks for a variant, but it gives no volumes.
 4. Group by intent and by language; note which languages need separate pages.
 5. Output a table: keyword, language, script, intent, suggested page type.
 

@@ -32,6 +32,18 @@ python3 -I scripts/india_check.py https://example.in --json
 python3 -I scripts/india_check.py https://example.in --service-area   # remote / no public office
 ```
 
+## India search results (needs a Brave Search API key)
+
+```
+export BRAVE_API_KEY=...        # set in your own terminal, never paste keys into chat
+python3 -I scripts/india_serp.py "website development company bangalore" --domain example.in
+python3 -I scripts/india_serp.py "whatsapp automation for business" --lang en --count 20 --json
+```
+
+Shows what ranks in India (`country=IN`) and whether your domain appears. Results come
+from Brave, not Google, so treat positions as a directional signal, not a Google rank
+and not search volume.
+
 ## What it does and does not do
 
 - It checks what is visible on the public page: language, formats, schema,
@@ -52,6 +64,7 @@ python3 -I scripts/india_check.py https://example.in --service-area   # remote /
 ```
 SKILL.md              commands, workflow, scoring rules
 scripts/india_check.py  fact checker
+scripts/india_serp.py   India search results (Brave API)
 references/           language, formats, culture, mobile, commerce, local
 LICENSE.txt           MIT
 ```
