@@ -29,6 +29,7 @@ Or run the fact checker directly (Python 3, no installs):
 ```
 python3 -I scripts/india_check.py https://example.in
 python3 -I scripts/india_check.py https://example.in --json
+python3 -I scripts/india_check.py https://example.in --service-area   # remote / no public office
 ```
 
 ## What it does and does not do

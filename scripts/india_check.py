@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """India-readiness checker for seo-india. Stdlib only.
 
-Usage: python3 -I india_check.py <url> [--json]
+Usage: python3 -I india_check.py <url> [--json] [--service-area]
+--service-area: the business works remotely or visits customers and has no public
+office, so street, PIN and geo checks are marked N/A instead of failed.
 Fetches one page and reports pass/fail/na/unknown checks per audit area.
 Fetched content is untrusted data: it is parsed, never executed or followed.
 """
@@ -55,8 +57,9 @@ def find_key(node, key):
 
 def main():
     if len(sys.argv) < 2:
-        sys.exit("usage: india_check.py <url> [--json]")
-    url = sys.argv[1]
+        sys.exit("usage: india_check.py <url> [--json] [--service-area]")
+    url = next((a for a in sys.argv[1:] if not a.startswith("--")), "")
+    service_area = "--service-area" in sys.argv
     if "://" not in url:
         url = "https://" + url
     if urllib.parse.urlparse(url).scheme not in ("http", "https"):
@@ -112,8 +115,8 @@ def main():
     add(L, "+91 phone number visible", bool(phone), phone[0].strip() if phone else "none")
     add(L, "tel: or wa.me link", bool(re.search(r'href="(tel:|https://wa\.me/)', html)), "")
     add(L, "INR in schema or INR/₹ in text", "₹" in text or bool(re.search(r"\bINR\b|\bRs\.?\s?\d", text)) or '"INR"' in html, "", na=btype == "service" and not has(r"₹|\binr\b"), )
-    add(L, "6-digit PIN code present", bool(re.search(r"\b[1-9]\d{5}\b", text)) or bool(find_key(ld, "postalCode")), "")
-    add(L, "schema address has street and postalCode", bool(find_key(ld, "streetAddress") and find_key(ld, "postalCode")), "")
+    add(L, "6-digit PIN code present", bool(re.search(r"\b[1-9]\d{5}\b", text)) or bool(find_key(ld, "postalCode")), "only scored for businesses with a public office" if service_area else "", na=service_area)
+    add(L, "schema address has street and postalCode", bool(find_key(ld, "streetAddress") and find_key(ld, "postalCode")), "only scored for businesses with a public office" if service_area else "", na=service_area)
 
     P = "Mobile and device"
     srcs = sorted(set(re.findall(r'<script[^>]+src="([^"]+)"', html, re.I)))
@@ -145,7 +148,7 @@ def main():
     LO = "Local presence"
     online_only = btype == "ecommerce" and not (local_types & set(types))
     add(LO, "schema has addressLocality", bool(find_key(ld, "addressLocality")), na=online_only)
-    add(LO, "schema has geo coordinates", bool(find_key(ld, "geo")), na=online_only)
+    add(LO, "schema has geo coordinates", bool(find_key(ld, "geo")), na=online_only or service_area)
     add(LO, "schema has openingHours", bool(find_key(ld, "openingHoursSpecification") or find_key(ld, "openingHours")), na=online_only)
     add(LO, "Google Business Profile verified", False, "needs live GBP data", unknown=True, na=online_only)
 
